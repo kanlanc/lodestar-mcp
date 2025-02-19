@@ -136,6 +136,13 @@ def trace_answer(trace_data):
 # --- End Placeholders ---
 
 
+
+@mcp.resource("echo://{message}")
+def echo_resource(message: str) -> str:
+    """Echo a message as a resource"""
+    return f"Resource echo: {message}"
+
+
 @mcp.tool()
 def doc_query(query: str, api_key: str, project_id: str)-> Dict[str, Any]:
     """Query project documentation.
@@ -167,6 +174,8 @@ def doc_query(query: str, api_key: str, project_id: str)-> Dict[str, Any]:
             "code_snippets": rag_result.get("code_snippets", []),
             "doc_links": rag_result.get("doc_links", []),
         }
+
+    
         response = ContextResponse(
             text=rag_result.get("answer_text", "No answer from RAG.")
         )
@@ -209,3 +218,8 @@ def doc_query(query: str, api_key: str, project_id: str)-> Dict[str, Any]:
         #     "context_id": "error-processing",
         #     "metadata": {}
         # }
+
+
+if __name__ == "__main__":
+    print("Starting MCP server...")
+    mcp.run()
